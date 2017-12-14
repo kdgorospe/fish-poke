@@ -106,9 +106,11 @@ ggSectors<-ggplot(data=sectorDf)+
   coord_equal()+ 
   geom_path(color="grey20", aes(x=long, y=lat, group=group))+
   theme_light()+
-  theme(legend.position="none")+
-  labs(x="Long", y="Lat")+
-  geom_text(data=seclabs, aes(x=labelLong, y=labelLat, label=label), color="black")
+  theme(text = element_text(size=22),
+        legend.position="none",
+        axis.text=element_text(size=18))+
+  labs(x="Longitude", y="Latitude")+
+  geom_text(data=seclabs, aes(x=labelLong, y=labelLat, label=label), size=5, color="black")
 
 
 #setwd("~/Analyses/fish-stock/RESULTS")
@@ -123,9 +125,9 @@ ggMauiNui<-ggplot(data=sectorDf, aes(color=island))+
   geom_path(aes(x=long, y=lat, group=group))+
   theme_light()+
   theme(legend.position="none",
-        axis.text=element_text(size=8))+
+        axis.text=element_blank())+
   labs(x="", y="")+
-  geom_text(data=seclabs, size=3, aes(x=labelLong, y=labelLat, label=inset))
+  geom_text(data=seclabs, size=5, aes(x=labelLong, y=labelLat, label=inset))
   
 # ORIGINAL
 #ggMauiNui<-ggplot(data=sectorDf)+
@@ -148,7 +150,7 @@ ggMauiNui<-ggplot(data=sectorDf, aes(color=island))+
 #ggSectors_grob<-ggplotGrob(ggSectors)
 ggMauiNui_grob<-ggplotGrob(ggMauiNui)
 
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="Figure1.pdf")
 ggSectors + 
   annotation_custom(grob=ggMauiNui_grob,
@@ -186,13 +188,13 @@ library(rgeos)
 library(ggthemes)
 
 ## SETTINGS:
-mapinput<-"mappingData_percentRecoveryEstimates-Herbivores.csv"
-fishtitle<-"Herbivores"
-legendtitle<-"Percent Recovery"
-variablename<-"Mid" # name of variable column in input file # change from 'minImpact_50%' to avoid weird symbols like %
-#variablename<-"recovery_50."
-#midcolor<-1.3 # approximate middle value of variable
-mapoutput<-paste("sectorMap_percentRecovery-Herbivores.pdf", sep="")
+mapinput<-"mappingData_recoveryEstimates-Herbivores.csv"
+fishtitle<-"Herbivores" #Total Reef Fish  OR   #Herbivores
+legendtitle<-"Absolute Recovery Potential"      #"Percent Recovery Potential"  OR #"Biomass Baseline"  OR #Absolute Recovery Potential
+# name of variable column in input file 
+# manually change in excel to avoid 'minImpact_50%' - weird symbols like %
+variablename<-"Mid"
+mapoutput<-paste("absRecoveryMap-Herbivores.pdf", sep="")
 
 
 
@@ -286,18 +288,27 @@ sectorDf<-merge(sectorPoints, sectorShape@data, by="id") #now merge by "id"
 #scale_fill_distiller(palette="Blues")+
 #scale_fill_distiller(palette="YlOrRd", direction=1)+
 #scale_colour_gradient2(low="red", mid="yellow", high="green")+
-#scale_fill_distiller(palette="Blues")+
-#scale_fill_gradient2(low="firebrick3", mid="gold", high="limegreen", midpoint=midcolor, na.value="white")+
+#scale_fill_distiller(palette="PuBuGn", direction=1, na.value="white")+
+
+# COLOR SCHEMES for DIFFERENT RESULTS:
+#USE FOR BASELINE BIOMASS: scale_fill_distiller(palette="Blues", direction=1, na.value="white")+
+#USE FOR PERCENT RECOVERY POTENTIAL: scale_fill_gradient(low="yellow", high="darkgreen", na.value="white")+
+#USE FOR (absolute) RECOVERY POTENTIAL: scale_fill_distiller(palette="Purples", direction=1, na.value="white")+
 ggSectors<-ggplot(data=sectorDf, aes(x=long, y=lat, group=group))+
   geom_polygon(aes(fill=sectorDf[variablename]), color=NA, size=10)+
-  scale_fill_distiller(palette="Oranges", direction=1)+
+  scale_fill_distiller(palette="Purples", direction=1, na.value="white")+
   coord_equal()+ 
   geom_path(color="grey20")+
   theme_light()+
-  theme(legend.position="bottom")+
-  labs(fill=legendtitle, x="Long", y="Lat", title=fishtitle)
+  theme(text = element_text(size=22), 
+        legend.position="bottom", 
+        axis.text.x=element_text(size=18), 
+        axis.text.y=element_text(size=18), 
+        legend.text=element_text(size=8),
+        legend.title=element_text(size=14))+
+  labs(fill=legendtitle, x="Longitude", y="Latitude", title=fishtitle)
 
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file=mapoutput)
 print(ggSectors)
 dev.off()

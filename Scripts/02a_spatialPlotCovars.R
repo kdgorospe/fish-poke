@@ -1,7 +1,8 @@
 rm(list=ls())
 library(reshape) # needed for melt()
 library(rjags) 
-library(xtable) 
+library(xtable)
+library(rgdal) # need for readOGR
 library(coda)
 library(gdata)    # needed for drop.levels()
 library(car)      # needed for Variance Inflation Factor calculation
@@ -143,8 +144,8 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 ################################################
 ### Select which SPECIES/GROUP on which to focus:
 
-fish<-"PRIMARY"
-#fish<-"INSTTotFishMinusSJRTB"
+#fish<-"PRIMARY"
+fish<-"INSTTotFishMinusSJRTB"
 
 
 ######################################### Select response column
@@ -211,7 +212,7 @@ names(dat)[which(names(dat)=="(dat$MEAN_Waves_MEAN)^2")]<-"meanWAVESsq"
 ################################################################################
 ################################################################################
 ################################################################################
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 
 ## USE covars LIST BELOW TO: (1) CREATE SCATTERPLOTS between RESPONSE and each COVAR
 ## (2) Test for colinearity
@@ -242,7 +243,7 @@ y <- dat.scatter[[focus]]
 scatter.final<-as.data.frame(cbind(y, dat.scatter[covars], dat.scatter$ISLAND))
 names(scatter.final)[length(scatter.final)]<-"ISLAND"
 
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock/")
 
 
 # Graph ONLY COVARS IN FINAL MODEL
@@ -278,29 +279,38 @@ fifty_states_sp <- readOGR(dsn = loc, layer = "states", verbose = FALSE)
 hawaii <- fifty_states_sp[fifty_states_sp$STATE_NAME == "Hawaii", ]
 
 fishcol<-grep(focus, names(dat.final))
-names(dat.final)[fishcol]<-"logBiomass"
+names(dat.final)[fishcol]<-"log Biomass"
 
-names(dat.final)[16:26]<-c("Coral", "CoralxCoral", "Sand", "CCA",
-           "Depth", "Complexity", "Visibility", "SST", "Waves", "WavesxWaves", "Human Density")
+names(dat.final)[16:26]<-c("Coral", "Coral x Coral", "Sand", "CCA",
+           "Depth", "Complexity", "Water Clarity", "SST", "Waves", "Waves x Waves", "log Human Density")
 
 
 for(i in fishcol:length(dat.final))
 {
 p<-ggplot(data=dat.final, aes(x=LONGITUDE, y=LATITUDE, color=dat.final[i])) + 
   geom_polygon(data=hawaii, aes(x=long, y=lat, group=group), fill="grey40", colour="grey90") +
-  geom_point(alpha=0.2) +
+  geom_point(alpha=0.7) +
+  #geom_jitter(alpha=0.8, width=0.02, height=0.02, size=0.9) + #just makes it look messy - doesn't really help see more points
   coord_equal(ratio=1) +
-  labs(x="Long", y="Lat", fill=names(dat.final)[i]) +
+  labs(x="Longitude", y="Latitude", fill=names(dat.final)[i]) +
   theme_light()+
-  theme(legend.position="bottom")+
-  scale_colour_gradientn(names(dat.final)[i], colours = c("red", "blue"))  
-  #scale_fill_distiller(palette="OrRd", direction=1)
+  theme(text = element_text(size=22), 
+        legend.position="bottom", 
+        axis.text.x=element_text(size=18), 
+        axis.text.y=element_text(size=18), 
+        legend.text=element_text(size=8),
+        legend.title=element_text(size=14))+
+  #scale_colour_gradientn(names(dat.final)[i], colours = terrain.colors(7))
+  #scale_colour_gradientn(names(dat.final)[i], colours = topo.colors(7))
+  #scale_colour_gradientn(names(dat.final)[i], colours = cm.colors(7))
+  #scale_colour_gradientn(names(dat.final)[i], colours = rainbow(7))
+  scale_colour_gradientn(names(dat.final)[i], colours = c("red", "gold1", "chartreuse2", "dodgerblue", "purple"))  
+  #scale_colour_gradientn(names(dat.final)[i], colours = c("blue", "dodgerblue", "chartreuse2", "gold1", "orangered"))  
+  #scale_fill_distiller(palette="OrRd", direction=1) # For discreet colors
 
 mapname<-paste("mapdat_", names(dat.final)[i], ".pdf", sep="")
 pdf(mapname)
 print(p)
 dev.off()
 }
-
-
 

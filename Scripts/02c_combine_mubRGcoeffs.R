@@ -14,8 +14,8 @@ names(tot)[6]<-"Upper"
 names(herb)[4]<-"Mean"
 names(tot)[4]<-"Mean"
 
-drivers<-c("Intercept", "Coral", "CoralxCoral", "Sand", "CCA",
-           "Depth", "Complexity", "Visibility", "SST", "Waves", "WavesxWaves", "Human Density")
+drivers<-c("Intercept", "Coral", "Coral x Coral", "Sand", "CCA",
+           "Depth", "Complexity", "Water Clarity", "SST", "Waves", "Waves x Waves", "Human Density")
 
 tot[,1]<-drivers
 herb[,1]<-drivers
@@ -37,12 +37,12 @@ p=ggplot(data=alldat, aes(x=alldat$drivers, y=alldat$Mean, fill=analysis)) +
   geom_hline(aes(yintercept=0), linetype="dotted", colour="black")+
   theme_light()+
   coord_flip()+
-  theme(axis.text.y=element_text(colour="black"), 
-        axis.text.x=element_text(angle=90, hjust=1, vjust=0.5, colour="black", size=10), 
+  theme(text = element_text(size=22),
+        axis.text.y=element_text(colour="black"), 
+        axis.text.x=element_text(hjust=1, vjust=0.5, colour="black", size=18), 
         legend.position="bottom", legend.title=element_blank())
 
-
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="mu.bRGestimates_COMBINED.pdf")
 print(p)
 dev.off()

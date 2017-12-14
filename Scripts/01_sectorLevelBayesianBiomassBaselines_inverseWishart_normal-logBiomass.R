@@ -156,8 +156,12 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 ################################################
 ### Select which SPECIES/GROUP on which to focus:
 
-fish<-"PRIMARY"
-#fish<-"INSTTotFishMinusSJRTB"
+
+#fish<-"INSTTotFishMinusSJRTB" # FULL DATASET - 730 sites
+#fish<-"PRIMARY" # 4 zeroes
+fish<-"SECONDARY" # no zeroes
+#fish<-"PLANKTIVORE" # 41 zeroes
+#fish<-"PISCIVORE" # 246 zeroes
 
 
 ######################################### Select response column
@@ -250,7 +254,7 @@ names(dat)[which(names(dat)=="(dat$MEAN_Waves_MEAN)^2")]<-"meanWAVESsq"
 ################################################################################
 ################################################################################
 ################################################################################
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 
 ## USE covars LIST BELOW TO: (1) CREATE SCATTERPLOTS between RESPONSE and each COVAR
 ## (2) Test for colinearity
@@ -290,7 +294,7 @@ y <- dat.scatter[[focus]]
 scatter.final<-as.data.frame(cbind(y, dat.scatter[covars], dat.scatter$ISLAND))
 names(scatter.final)[length(scatter.final)]<-"ISLAND"
 
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 
 # COMMENT OUT scatterplot outputs since these are the same for all repeat analyses
 for(i in 1:dim(scatter.final[covars])[2])
@@ -853,8 +857,8 @@ start.time.coda<-Sys.time()
 #n.iter=1000000 # one million
 #n.iter=500000 # LONG RUN
 #n.iter=200000 # NEW LONG RUN
-#n.iter=50000 # SHORT RUN
-n.iter=5000 # PRACTICE RUN
+n.iter=50000 # SHORT RUN
+#n.iter=5000 # PRACTICE RUN
 n.thin=10
 z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=n.thin) 
 end.time.coda<-Sys.time()
@@ -872,8 +876,8 @@ end.time.coda<-Sys.time()
 #burn.in <- 905000
 #burn.in <- 405000 # LONG RUN
 #burn.in <- 105000 # NEW LONG RUN
-#burn.in <- 45000 # SHORT RUN
-burn.in <- 6000 # PRACTICE RUN
+burn.in <- 45000 # SHORT RUN
+#burn.in <- 6000 # PRACTICE RUN
 z3a.burnin<-window(z3a, start=burn.in)
 #rm(z3a)
 
@@ -916,8 +920,8 @@ sects<-c("Hawaii-Hamakua", "Hawaii-Kona", "Hawaii-Puna", "Hawaii-Southeast",
 ### TWO REASONS: (1) sects must be in alphabetical order - i.e., same as LEVELS(dat$Sector) - if downstream re-ordering of axes is to work
 ### (2) easier to use match(sects, levels(dat$Sector)) and grep if patterns can't be confused (e.g., Oahu-North would atch Oahu-North and Oahu-Northeast)
 
-drivers<-c("Intercept", "Coral", "CoralxCoral", "Sand", "CCA",
-           "Depth", "Complexity", "Visibility", "SST", "Waves", "WavesxWaves", "Human Density")
+drivers<-c("Intercept", "Coral", "Coral x Coral", "Sand", "CCA",
+           "Depth", "Complexity", "Visibility", "SST", "Waves", "Waves x Waves", "Human Density")
 
 ## REMINDER - in model, A and B matrix is formed with j (rows) as islands and k (columns) as drivers/covariates: A[j,k] <- xi.a[k]*A.raw[j,k]  
 ## Check order of colnames in mcmc object
@@ -989,8 +993,7 @@ z3a.pars<-z3a.burnin[,c(B.cols, mu.bIS.cols, mu.bRG.cols, rho.bIS.cols, rho.bRG.
 ####################################################################################
 ####################################################################################
 # TRACEPLOTS
-setwd("~/Analyses/fish-stock/RESULTS")
-#pdf(file="model3a_traceplots.pdf")
+setwd("~/Analyses/RESULTS/fish-stock")
 png(filename="model3a_traceplot%01d.png", width=1080, height=960, pointsize=24)
 plot(z3a.pars) 
 dev.off()
@@ -1067,7 +1070,7 @@ for(i in 1:length(par.names))
 # All parameter graphs above need to be further subdivided (except sig.y, rho.bRG, and sigma.bRG)
 
 # SPLIT UP B matrix graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   B.plot<-B[((i*nsector)-(nsector-1)):(i*nsector),]
@@ -1086,7 +1089,7 @@ for(i in 1:length(drivers))
 }
 
 # SPLIT UP mu.bIS graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   mu.bIS.plot<-mu.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1105,7 +1108,7 @@ for(i in 1:length(drivers))
 }
 
 # SPLIT UP rho.bIS graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 corr.pairs<-length(reg.corr.combo)
 for(i in 1:length(isles))
 {
@@ -1127,7 +1130,7 @@ for(i in 1:length(isles))
 
 
 # SPLIT UP sigma.bIS graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   sigma.bIS.plot<-sigma.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1407,7 +1410,7 @@ sigma.bRG<-coeff.df[grep("sigma.bRG", rownames(coeff.df)),]
 par.names<-c("B", "mu.bIS", "mu.bRG", "rho.bIS", "rho.bRG", "sig.y", "sigma.bIS", "sigma.bRG")
 
 # BRUTE FORCE PLOT:
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(par.names))
 {
   par.plot<-get(par.names[i])
@@ -1430,7 +1433,7 @@ for(i in 1:length(par.names))
 # All parameter graphs above need to be further subdivided (except sig.y, rho.bRG, and sigma.bRG)
 
 # SPLIT UP B Matrix
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   B.plot<-B[((i*nsector)-(nsector-1)):(i*nsector),] # Get b estimates
@@ -1483,7 +1486,7 @@ for(i in 1:length(drivers))
 #dev.off()
 
 # SPLIT UP mu.bIS graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   mu.bIS.plot<-mu.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1502,7 +1505,7 @@ for(i in 1:length(drivers))
 }
 
 # SPLIT UP rho.bIS graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 corr.pairs<-length(reg.corr.combo)
 for(i in 1:length(isles))
 {
@@ -1522,12 +1525,12 @@ for(i in 1:length(isles))
 }
 
 # SPLIT UP sigma.bIS graph
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   sigma.bIS.plot<-sigma.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
   row.names(sigma.bIS.plot)<-gsub(x=row.names(sigma.bIS.plot), pattern=".*\\[| .*\\]", replacement="")
-  p<-ggplot(mu.bIS.plot, aes(x=isles, y=sigma.bIS.plot[,3])) +
+  p<-ggplot(mu.bIS.plot, aes(x=isles, y=sigma.bIS.plot[,3])) +sigma.bSC.plotmarx
     geom_errorbar(aes(ymin=sigma.bIS.plot[,1], ymax=sigma.bIS.plot[,5]), size=1, width=0.1, colour="blue") +
     geom_point(colour="blue") +
     geom_hline(aes(yintercept=0), linetype="dashed", colour="red") +
@@ -1667,7 +1670,8 @@ p=ggplot(data=dat.graph, aes(x=SC, y=Predicted)) +
   geom_point(aes(x=SC, y=Predicted)) +
   labs(y=expression(paste("log Biomass (g",m^{-2}, ")")), x="") +
   theme_light()+
-  theme(text = element_text(size=18), axis.text.x=element_text(angle=90, vjust=0.5, colour="black", size=10), legend.position="none") +
+  theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
+        legend.position="none") +
   coord_flip() 
   #geom_errorbar(aes(ymin=dat.graph$Lower, ymax=dat.graph$Upper, colour=variable), position=position_dodge(width=1))
 
@@ -1680,11 +1684,14 @@ pred.b <- aes(xmax = axis.order + 0.45, xmin = axis.order - 0.45, ymax=Upper, ym
 
 p=ggplot(data=dat.bt.graph, aes(x=SC, y=Predicted)) + 
   geom_point(aes(x=SC, y=Predicted)) +
+  geom_rect(pred.b, fill = "gray40", alpha=.6) +
   geom_errorbar(aes(ymin=y.lower, ymax=y.upper), size=1.1, colour="red3", width=0.5) +
   geom_point(aes(x=SC, y=Observed), shape=23, colour="red3", fill="red3") +
-  geom_rect(pred.b, fill = "gray40", alpha=.6) +
+  geom_point(aes(x=SC, y=Predicted)) +
   labs(y=expression(paste("Biomass (g",m^{-2}, ")")), x="")+
-  theme(text = element_text(size=18), axis.text.x=element_text(angle=90, vjust=0.5, colour="black", size=10), legend.position="none") +
+  theme_light()+
+  theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
+        legend.position="none") +
   coord_flip() 
 
 pdf(file="sectorLevelObservedVsPredicted_backtransBiomass_independentChains_avgQuantiles.pdf")
@@ -1862,7 +1869,7 @@ dat.deplete[,2:11]<-exp(dat[,2:11])
 percentDepletion<-100-(dat.deplete$PresentDay/dat.deplete$MinimalImpact)*100
 deplete.table<-as.data.frame(cbind(as.character(dat.deplete$SC), percentDepletion))
 names(deplete.table)[1]<-"SC"
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 write.csv(deplete.table, file="sectorLevel_percentDepletion.csv", quote=FALSE, row.names=FALSE)
 
 
@@ -1892,7 +1899,7 @@ p=ggplot(data=dat.graph, aes(x=SC, y=value, fill=variable)) +
         axis.text.x=element_text(angle=90, hjust=0, vjust=0.5, colour="black", size=10),
         legend.position="bottom", legend.title=element_blank()) +
   geom_errorbar(aes(ymin=dat.graph$Lower, ymax=dat.graph$Upper, colour=variable), position=position_dodge(width=1))
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_logBiomass-unordered_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -1922,14 +1929,16 @@ write.csv(dat.bt, file="mappingData_minimalImpactEstimates_bt.csv", quote=FALSE,
 natlimits <- aes(xmax = axis.order + 0.45, xmin = axis.order - 0.45, ymax =MinimalImpactUpper, ymin=MinimalImpactLower)#
 
 p<-ggplot(data=dat, aes(x=SC, y=MinimalImpact)) + 
-  geom_point(aes(x=SC, y=MinimalImpact)) +
-  geom_errorbar(aes(ymin=PresentDayLower, ymax=PresentDayUpper), size=1.1, colour="red3", width=0.5) +
-  geom_point(aes(x=SC, y=PresentDay), shape=23, colour="red3", fill="red3") +
-  geom_rect(natlimits, fill = "gray40", alpha=.6) +
+  geom_point(aes(x=SC, y=MinimalImpact), colour="white") +
+  geom_rect(natlimits, fill = "steelblue4", alpha=.6) +
+  geom_errorbar(aes(ymin=PresentDayLower, ymax=PresentDayUpper), size=1.1, colour="black", width=0.5) +
+  geom_point(aes(x=SC, y=PresentDay), shape=23, colour="black", fill="black") +
+  geom_point(aes(x=SC, y=MinimalImpact), colour="white") +
   labs(y="log Biomass", "Modeled Present Day vs. Minimal Impact log Biomass", x="") +
-  theme(text = element_text(size=22), axis.text.x=element_text(angle=90, vjust=0.5, colour="black", size=10), legend.position="none") +
+  theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
+        legend.position="none") +
   coord_flip()
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_logBiomass_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -1946,7 +1955,7 @@ p=ggplot(data=dat.unordered.bt, aes(x=SC, y=value, fill=variable)) +
         legend.position="bottom", legend.title=element_blank()) +
   geom_errorbar(aes(ymin=Lower, ymax=Upper, colour=variable), position=position_dodge(width=1))
 
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_backtransBiomass-unordered_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -1955,20 +1964,22 @@ dev.off()
 natlimits.bt <- aes(xmax = axis.order + 0.45, xmin = axis.order - 0.45, ymax = MinimalImpactUpper, ymin= MinimalImpactLower)
 
 p<-ggplot(data=dat.bt, aes(x=SC, y=MinimalImpact)) + 
-  geom_point(aes(x=SC, y=MinimalImpact)) +
-  geom_rect(natlimits.bt, fill = "gray40", alpha=.6) +
-  geom_errorbar(aes(ymin=PresentDayLower, ymax=PresentDayUpper), colour="red3", size=1.1, width=0.5) +
-  geom_point(aes(x=SC, y=PresentDay), shape=23, colour="red3", fill="red3") +
-  geom_point(aes(x=SC, y=MinimalImpact)) +
+  geom_point(aes(x=SC, y=MinimalImpact), colour="white") +
+  geom_rect(natlimits.bt, fill = "steelblue4", alpha=.6) +
+  geom_errorbar(aes(ymin=PresentDayLower, ymax=PresentDayUpper), colour="black", size=1.1, width=0.5) +
+  geom_point(aes(x=SC, y=PresentDay), shape=23, colour="black", fill="black") +
+  geom_point(aes(x=SC, y=MinimalImpact), colour="white") +
   labs(y=expression(paste("Biomass (g",m^{-2}, ")")), x="") +  
   theme_light()+
-  theme(text = element_text(size=18), axis.text.x=element_text(angle=90, vjust=0.5, colour="black", size=10), 
+  theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
         legend.position="none") +
   coord_flip()
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_backtransBiomass_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
+
+
 
 ################################################################################################
 ################################################################################################
@@ -2048,13 +2059,14 @@ names(dat)[c(2,6)]<-c("UpperRP", "LowerRP")
 names(dat)[4]<-"MidRP"
 
 p<-ggplot(data=dat, aes(x=SC, y=MidRP)) + 
-  geom_errorbar(aes(ymin=LowerRP, ymax=UpperRP), colour="forestgreen", size=1.2, width=0.5) +
-  geom_point(aes(x=SC, y=MidRP), size=2, colour="forestgreen") +
+  geom_errorbar(aes(ymin=LowerRP, ymax=UpperRP), colour="slateblue", size=1.2, width=0.5) +
+  geom_point(aes(x=SC, y=MidRP), size=2, colour="slateblue") +
   labs(y=expression(paste("Biomass (g",m^{-2}, ") Recovery Potential")), x="") +  
   theme_light()+
-  theme(text = element_text(size=18), axis.text.x=element_text(angle=90, vjust=0.5, colour="black", size=10), legend.position="none") +
+  theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
+        legend.position="none") +
   coord_flip()
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelRecoveryPotential_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2140,7 +2152,7 @@ p=ggplot(data=dat, aes(x=SC, y=Mid)) +
         axis.text.x=element_text(angle=90, hjust=0, vjust=0.5, colour="black", size=10),
         legend.position="bottom", legend.title=element_blank()) +
   geom_errorbar(aes(ymin=dat$Lower, ymax=dat$Upper))
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelPercentRecoveryPotential-unordered_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2166,9 +2178,10 @@ p<-ggplot(data=dat, aes(x=SC, y=MidPercent)) +
   geom_point(aes(x=SC, y=MidPercent), size=2, colour="forestgreen") +
   labs(y=expression(paste("Biomass (g",m^{-2}, ") Percent Recovery Potential")), x="") +  
   theme_light()+
-  theme(text = element_text(size=18), axis.text.x=element_text(angle=90, vjust=0.5, colour="black", size=10), legend.position="none") +
+  theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
+        legend.position="none") +
   coord_flip()
-setwd("~/Analyses/fish-stock/RESULTS")
+setwd("~/Analyses/RESULTS/fish-stock")
 pdf(file="sectorLevelPercentRecoveryPotential_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
