@@ -6,11 +6,13 @@ library(coda)
 library(gdata)    # needed for drop.levels()
 library(car)      # needed for Variance Inflation Factor calculation
 library(ggplot2)
+library(corrplot)
 
 ##### CHANGE RESPONSE VARIABLE AS NEEDED: "PRIMARY" VS "INSTTotFishMinusSJRTB"
 
 setwd("~/Analyses/fish-stock")
-load("~/Analyses/fish-stock/input/TMPwsd_MHI_AllHerbivoresThru2016.RData") # new correct dataframe
+load("~/Analyses/fish-stock/input/TMPwsd_MHI_AllHerbivoresThru2016.RData") # by CONSUMER GROUPS
+#load("~/Analyses/fish-stock/input/TMPwsd_REAthru2017-SpeciesLevel.RData") # by SPECIES
 mhi<-wsd
 
 
@@ -35,30 +37,54 @@ ocean.dat<-merge(chl.dat, irr.dat, by=ocean.common, all=TRUE)
 ocean.dat<-merge(ocean.dat, sst.dat, by=ocean.common, all=TRUE)
 ocean.dat<-merge(ocean.dat, wav.dat, by=ocean.common, all=TRUE)
 
-### MERGE with fish HERBIVORE data
-sub.dat<-subset(ocean.dat, select=-c(LATITUDE, LONGITUDE, DATE_, ANALYSIS_SEC, ANALYSIS_STRATA, ANALYSIS_YEAR, SEC_NAME,
+
+### All data including data from post-bleaching years
+table(mhi$OBS_YEAR, mhi$REGION)
+#MHI NWHI PRIAs SAMOA S.MARIAN N.MARIAN
+#2007   0  117     0     0        0        0
+#2008   0    0    96   112        0        0
+#2009   0  181    29     0       82       95
+#2010 184  118   179   241        0        0
+#2011   0  141    30     0      219      135
+#2012 163   91   231   223        0        0
+#2013 287    0     0     0        0        0
+#2014   0   89    45     0      210      148
+#2015 294   96   291   338        0        0
+#2016 256  182    30   185        0        0
+#2017   0    0    81     0      172      159
+
+table(ocean.dat$OBS_YEAR, ocean.dat$REGION)
+#MHI
+#2012 163
+#2013 287
+#2015 294
+#2016 256
+
+# i.e. REA data (mhi) and oceanography data (ocean.dat) have the same # of sites - merge should be perfect
+
+### MERGE with fish data - simplify the merge by removing most common columns
+ocean.dat<-subset(ocean.dat, select=-c(LATITUDE, LONGITUDE, DATE_, ANALYSIS_SEC, ANALYSIS_STRATA, ANALYSIS_YEAR, SEC_NAME,
                                      METHOD, OBS_YEAR, REGION, REGION_NAME, ISLAND, REEF_ZONE, DEPTH_BIN, HABITAT_CODE,
                                      DEPTH, HARD_CORAL, MA, CCA, SAND, OTHER_BENTHIC, MEAN_SH, SD_SH_DIFF, MAX_HEIGHT,
                                      VISIBILITY, nCounts, nReps))
 
 ### All data including post-bleaching 2016 data
 common<-c("SITEVISITID", "SITE")
-alldat<-merge(mhi, sub.dat, by=common)
-write.csv(alldat, file="~/Analyses/fish-stock/RESULTS/oceanDat_fishDat_2012-2016_JOIN.csv", quote=FALSE)
+alldat<-merge(mhi, ocean.dat, by=common)
+### Only the study data - 2012 thru 2015
+study.dat<-subset(alldat, OBS_YEAR<2016 & OBS_YEAR>2011)
 
-### Only the study data - 2012 thru 2016
-study.dat<-subset(alldat, OBS_YEAR<2016)
-write.csv(study.dat, file="~/Analyses/fish-stock/RESULTS/oceanDat_fishDat_2012-2015_JOIN.csv", quote=FALSE)
 
 # Join with Humans and Site Data
 siteDat<-read.csv("~/Analyses/fish-stock/input/SITE MASTER2016.csv")
 
-#When merging, don't merge by date, latitude, or longitude. 
+#W Again - simplify the merge by removing most common columns
 #Slight differences in the object class for "DATE_" and number of decimal numbers for "LAT" and "LONG"
-sub.dat<-subset(study.dat, select=-c(DATE_, LATITUDE, LONGITUDE, ANALYSIS_STRATA, ANALYSIS_YEAR, SEC_NAME))
+sub.dat<-subset(study.dat, select=-c(DATE_, LATITUDE, LONGITUDE, ANALYSIS_YEAR, SEC_NAME))
 #common<-names(siteDat)[names(siteDat) %in% names(study.dat)]
-common<-c("SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN", "ANALYSIS_SEC")
+common<-c("SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN")
 dat<-merge(sub.dat, siteDat, by=common)
+
 
 
 ### MERGE with benthic image analysis data (CPCe and CNET)
@@ -88,6 +114,9 @@ benthic.cpce.common<-subset(x=benthic.cpce, select=common.cats)
 benthic<-rbind(benthic.cnet.common, benthic.cpce.common)
 
 #Again, when merging, don't merge by date, latitude, or longitude. 
+
+common2<-names(benthic)[names(benthic) %in% names(dat)]
+common<-common[!(common %in% c("DATE_", "LATITUDE", "LONGITUDE"))]
 benthic<-subset(benthic, select=-c(DATE_, LATITUDE, LONGITUDE))
 common2<-c("SITE", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN")
 dat<-merge(dat, benthic, by=common2)
@@ -159,8 +188,8 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 
 #fish<-"INSTTotFishMinusSJRTB" # FULL DATASET - 730 sites
 #fish<-"PRIMARY" # 4 zeroes
-fish<-"SECONDARY" # no zeroes
-#fish<-"PLANKTIVORE" # 41 zeroes
+#fish<-"SECONDARY" # no zeroes
+fish<-"PLANKTIVORE" # 41 zeroes
 #fish<-"PISCIVORE" # 246 zeroes
 
 
@@ -197,12 +226,17 @@ hist(log(dat$HUMANS200),breaks=10, xlab="Humans 200")
 
 ### FIRST, FOR HERBIVORES ANALYSIS (i.e., fish<-"PRIMARY"), there are four sites with zeroes, remove these
 ### OTHERWISE they create NA terms (symbolized by "-Inf")
-dat<-dat[dat[,fish]>0,]
+#dat<-dat[dat[,fish]>0,]
+
+
+### FOR OTHER ANALYSES with more zero-inflation, replace zeroes with small number
+dat[,fish][(dat[,fish]==0)]<-0.01
+hist(dat[,fish],breaks=30,main=fish, xlab=indicator)
 
 # now log
 dat <- cbind(dat, log(dat[,fish])) # No longer need + 1 since this isn't a zero-inflated model
 names(dat)[grep("fish", names(dat))]<-paste("log",fish,sep="")
-
+hist(dat[,(paste("log",fish,sep=""))],breaks=30,main=fish, xlab=indicator)
 
 
 
@@ -272,18 +306,42 @@ covars<-c("VISIBILITY", "DEPTH", "MEAN_SH", "SD_SH_DIFF", "MAX_HEIGHT",
 dat.covars<-subset(dat, select=covars)
 dat.covars<-na.omit(dat.covars)
 
-# CORRELATION TABLE
-cor.covars<-cor(dat.covars)
-write.csv(cor.covars, file="Cor.covars_0.5.csv")
-cor.covars.test<-cor.covars>abs(0.5)
-write.csv(cor.covars.test, file="Cor.covars_0.5.test.csv")
 
+# PAIRWISE SCATTERPLOTS:
+#setwd("~/Analyses/RESULTS/fish-stock")
+#pdf(file="01Figure_correlationpairs.pdf")
+#pairs(dat.covars)
+#dev.off()
+
+# CALCULATE ALL PAIRWISE CORRELATIONS
+
+# Pearson's for all continuous vars
+cor.covars<-cor(dat.covars)
+write.csv(cor.covars, file="02aFigure_Cor.covars_0.5.csv")
+cor.covars.test<-abs(cor.covars)>0.5
+write.csv(cor.covars.test, file="02bFigure_Cor.covars_0.5.test.csv")
+
+# Spearman's for all ranked, ordered vars (e.g., DACOR data)
+cor.spear<-cor(dat.covars, method="spearman")
+write.csv(cor.spear, file="02cFigure_Cor.spear_0.5.csv")
+cor.spear.test<-abs(cor.spear)>0.5
+write.csv(cor.spear.test, file="02dFigure_Cor.spear_0.5.test.csv")
+
+setwd("~/Analyses/RESULTS/fish-stock")
+pdf(file="02eFigure_correlationVisual.pdf")
+corrplot(cor.covars, insig="p-value")
+dev.off()
+
+setwd("~/Analyses/RESULTS/fish-stock")
+pdf(file="02fFigure_correlationSpearVisual.pdf")
+corrplot(cor.spear, insig="p-value")
+dev.off()
 
 ########################################## SCATTERPLOTS
 #### CREATE SCATTERPLOTS OF ALL COVARIATES (decide later which ones to include in analysis)
 
 # Select all site ID and hierarchical ID information
-xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "HABITAT_CODE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME", "ANALYSIS_STRATA", "ANALYSIS_SEC", "METHOD")
+xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "HABITAT_CODE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME", "METHOD")
 
 dat.scatter<-cbind(dat[xa], dat[focus], dat[covars])
 dat.scatter<-na.omit(dat.scatter)
@@ -321,7 +379,7 @@ xi <- c("Total.Coral", "Total.sqCoral",
 ################################################################################ 
 
 # Select all site ID and hierarchical ID information
-xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "HABITAT_CODE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME", "ANALYSIS_STRATA", "ANALYSIS_SEC", "METHOD", "DATE_")
+xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "HABITAT_CODE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME", "METHOD", "DATE_")
 #xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME", "ANALYSIS_STRATA", "ANALYSIS_SEC", "METHOD")
 
 
@@ -453,19 +511,37 @@ vif.test.3
 
 write.csv(vif.test.3, file="vif.test.3.csv", quote=FALSE)
 
-
-
 ##########################################################################################
 ##########################################################################################
 # FINAL variable selection for matrix Xb
 ##########################################################################################
 ##########################################################################################
-finalcovar <- c("Total.Coral", "Total.sqCoral", "SED_Sediment", "CCA_Coralline.Alga", 
-                "DEPTH", "MEAN_SH", "VISIBILITY", 
-                "MEAN_SST_MEAN",
-                "MEAN_Waves_MEAN", "meanWAVESsq",
+
+
+# Simplify analysis
+# REMOVE IRRADIANCE - not a clear mechanism for affecting fish biomass; also not converging
+# REMOVE SST ANOM FREQ - not converging
+
+# LIST OF ALL VARIABLES THAT PASS COLLINEARITY / MULTI-COLLINEARITY tests:
+finalcovar <- c("Total.Coral", "Total.sqCoral", 
+                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
+                "DEPTH", "MEAN_SH", "VISIBILITY",
+                "MEAN_Chla_MEAN", "MEAN_Chla_ANOM_FREQ", 
+                "MEAN_SST_SD", "MEAN_SST_MEAN",
+                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
                 "logHUMANS20"
                 )      
+
+# LIST OF ALL SIGNIFICANT DRIVERS FOR FINAL MODEL:
+#finalcovar <- c("Total.Coral", "Total.sqCoral", 
+#                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
+#                "DEPTH", "MEAN_SH", "VISIBILITY",
+#                "MEAN_Chla_ANOM_FREQ", 
+#                "MEAN_SST_MEAN",
+#                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
+#                "logHUMANS20"
+#)      
+
 
 Xb<-Xb[,finalcovar]
 
@@ -541,7 +617,7 @@ xsim[human.col]<-"logHUMANSIM"
 
 
 # Select all site ID and hierarchical ID information
-xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME","ANALYSIS_STRATA", "ANALYSIS_SEC", "METHOD")
+xa <- c("LATITUDE", "LONGITUDE", "SITE", "SITEVISITID", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN", "SEC_NAME", "METHOD")
 
 ### REMOVE ALL NA Data
 dat.sim<-cbind(dat[xa], dat[focus], dat[xsim])
@@ -660,10 +736,11 @@ mhi.data <- list(y=y, Xb=Xb, N=nobs, nisland=nisland, W.B=W.B, nbeta=nbeta, SC=S
 ## MATCH chain.b with expected sign of each covariate in colnames(Xb) - this is used for supplying initial values to the MCMC
 chain.b<-c(1, 
            1, -1,
-           -1, 1,  
+           -1, -1, 1,  
            1, 1, 1,
-           -1,
-           1, -1,
+           1, 1,
+           -1, -1,
+           1, -1, -1,
            -1)
 
 #           ,rep(0, numb.interactions))
@@ -920,8 +997,8 @@ sects<-c("Hawaii-Hamakua", "Hawaii-Kona", "Hawaii-Puna", "Hawaii-Southeast",
 ### TWO REASONS: (1) sects must be in alphabetical order - i.e., same as LEVELS(dat$Sector) - if downstream re-ordering of axes is to work
 ### (2) easier to use match(sects, levels(dat$Sector)) and grep if patterns can't be confused (e.g., Oahu-North would atch Oahu-North and Oahu-Northeast)
 
-drivers<-c("Intercept", "Coral", "Coral x Coral", "Sand", "CCA",
-           "Depth", "Complexity", "Visibility", "SST", "Waves", "Waves x Waves", "Human Density")
+#drivers<-c("Intercept", "Coral", "Coral x Coral", "Sand", "CCA",
+#           "Depth", "Complexity", "Visibility", "SST", "Waves", "Waves x Waves", "Human Density")
 
 ## REMINDER - in model, A and B matrix is formed with j (rows) as islands and k (columns) as drivers/covariates: A[j,k] <- xi.a[k]*A.raw[j,k]  
 ## Check order of colnames in mcmc object
@@ -1362,6 +1439,7 @@ for (i in 1:length(levels(yrep.habid$SECTOR)))
 ####################################################################
 
 # USE CUSTOMIZED QUANTILES TO GRAPH COEFFICIENT PLOTS
+#quantilesofinterest=c(.99975, .75, .5, .25, .00025) # i.e., 95% confidence intervals
 quantilesofinterest=c(.83, .75, .5, .25, .17) # i.e., 66% confidence intervals
 allchain.quantiles<-as.data.frame(NA)
 for(i in 1:length(z3a.pars)){
@@ -1376,14 +1454,15 @@ for(i in 1:length(z3a.pars)){
 
 ## AVERAGE ACROSS THE THREE CHAINS; 
 
-firstquantile<-"83%"
+firstquantile<-paste(quantilesofinterest[1]*100, "%", sep="")
 firstquant.cols<-grep(firstquantile, names(allchain.quantiles))
 allchain.firstquant<-as.data.frame(apply(allchain.quantiles[,firstquant.cols], MARGIN=1, FUN=mean))
 names(allchain.firstquant)<-firstquantile
 
 df.quantiles<-allchain.firstquant
 
-quantilelist<-c("75%", "50%", "25%", "17%")
+quantilelist<-paste(quantilesofinterest[-1]*100, "%", sep="")
+#quantilelist<-c("75%", "50%", "25%", "17%")
 for(i in 1:length(quantilelist)){
   quant<-quantilelist[i]
   #quant.cols<-grep(quant, names(allchain.quantiles))
@@ -1530,7 +1609,7 @@ for(i in 1:length(drivers))
 {
   sigma.bIS.plot<-sigma.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
   row.names(sigma.bIS.plot)<-gsub(x=row.names(sigma.bIS.plot), pattern=".*\\[| .*\\]", replacement="")
-  p<-ggplot(mu.bIS.plot, aes(x=isles, y=sigma.bIS.plot[,3])) +sigma.bSC.plotmarx
+  p<-ggplot(mu.bIS.plot, aes(x=isles, y=sigma.bIS.plot[,3])) +
     geom_errorbar(aes(ymin=sigma.bIS.plot[,1], ymax=sigma.bIS.plot[,5]), size=1, width=0.1, colour="blue") +
     geom_point(colour="blue") +
     geom_hline(aes(yintercept=0), linetype="dashed", colour="red") +
@@ -1544,6 +1623,7 @@ for(i in 1:length(drivers))
 
 # PLOT parameters BY SECTOR, for ALL SECTORS
 # NOTE: Sector names below are hardcoded (need to make this more flexible)
+# IF SOME ERROR BARS ARE NOT PLOTTING, WILL NEED TO CHANGE BOUNDS OF YLIM
 marxan<-sects # Originally requested by Anne Rosinski for DAR's Marxan Project
 for(i in 1:length(marxan)){
   B.plot<-B[grep(paste("\\b",marxan[i], "\\b", sep=""), rownames(B)),] ## \\b places "word boundaries" on the search pattern (e.g., For pattern="Oahu-N", grep will return "Oahu-N", but not "Oahu-NE")
@@ -2188,7 +2268,7 @@ dev.off()
 
 
 #SAVE DATA
-rm(z3a.pars, z3a.sim)
+#rm(z3a.pars, z3a.sim)
 save.image(file="_bayesianSavedWorkspace_forReDoingOutputs.RData")
 
 
