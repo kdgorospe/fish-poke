@@ -969,7 +969,7 @@ burn.in <- 105000 # NEW LONG RUN
 #burn.in <- 45000 # SHORT RUN
 #burn.in <- 6000 # PRACTICE RUN
 z3a.burnin<-window(z3a, start=burn.in)
-#rm(z3a)
+rm(z3a)
 
 pvals.cols<-grep("pvalue", colnames(z3a.burnin[[1]]))
 pval.table<-as.data.frame(summary(z3a.burnin[1:3][,pvals.cols])$statistics)
@@ -1319,7 +1319,10 @@ fit<-ggplot(yrep.full, aes(x=yrep.full$y, y=yrep.full$yreps50))+
   geom_abline(aes(intercept=0, slope=1), colour="black") +
   annotate("text", x=0, y=max(yrep.full$yreps97.5), hjust=0, label=paste("R squared = ", r.sq.2, sep="")) +
   annotate("text", x=0, y=max(yrep.full$yreps97.5)*0.95, hjust=0, label=paste("Coverage = ", coverage.2, "%", sep="")) +
-  theme(legend.position="bottom", legend.title=element_blank())
+  theme(text = element_text(size=18),
+        axis.text.y=element_text(size=18),
+        axis.text.x=element_text(vjust=0.5, size=18),
+        legend.position="bottom")
 pdf(file="model3a_FullModel_predictedVsObserved.pdf")
 print(fit)
 dev.off()
@@ -1327,7 +1330,6 @@ dev.off()
 # PLOT without error bars
 fit<-ggplot(yrep.full, aes(x=yrep.full$y, y=yrep.full$yreps50))+
   geom_point()+
-  coord_cartesian(xlim=c(0,max(yrep.full$y, yrep.full$yreps50)), ylim=c(0,max(yrep.full$y, yrep.full$yreps50)))+
   labs(x="observed", y="predicted")+
   geom_abline(aes(intercept=0, slope=1), colour="black")+
   annotate("text", x=0, y=max(yrep.full$y, yrep.full$yreps50), hjust=0,  label=paste("R squared = ", r.sq.2, sep=""))+
@@ -1351,7 +1353,6 @@ for(i in 1:length(nointercept.drivers))
   fit<-ggplot(yrep.full.covars, aes(x=yrep.full.covars$y, y=yrep.full.covars$yreps50))+
     geom_point(aes(color=yrep.full.covars[nointercept.drivers[i]]))+
     scale_colour_gradientn(colours=c("yellow", "blue"), name=nointercept.drivers[i])+
-    coord_cartesian(xlim=c(0,max(yrep.full.covars$y, yrep.full.covars$yreps50)), ylim=c(0,max(yrep.full.covars$y, yrep.full.covars$yreps50)))+
     labs(x="observed", y="predicted")+
     geom_abline(aes(intercept=0, slope=1), colour="black")+
     theme(legend.position="bottom", legend.key.size=unit(1, "cm"))
@@ -1365,7 +1366,6 @@ for(i in 1:length(nointercept.drivers))
 fit<-ggplot(yrep.full.covars, aes(x=yrep.full.covars$y, y=yrep.full.covars$yreps50))+
   geom_point(aes(color=yrep.full.covars$ISLAND))+
   scale_colour_brewer(name="ISLAND", palette="Dark2")+
-  coord_cartesian(xlim=c(0,max(yrep.full.covars$y, yrep.full.covars$yreps50)), ylim=c(0,max(yrep.full.covars$y, yrep.full.covars$yreps50)))+
   labs(colour="ISLAND", x="observed", y="predicted")+
   geom_abline(aes(intercept=0, slope=1), colour="black")+
   theme(legend.position="bottom")
@@ -1378,7 +1378,6 @@ dev.off()
 fit<-ggplot(yrep.full.covars, aes(x=yrep.full.covars$y, y=yrep.full.covars$yreps50, group=SECTOR, color=SECTOR, shape=SECTOR))+
   scale_shape_manual(values=1:nlevels(yrep.full.covars$SECTOR))+
   geom_point()+
-  coord_cartesian(xlim=c(0,max(yrep.full.covars$y, yrep.full.covars$yreps50)), ylim=c(0,max(yrep.full.covars$y, yrep.full.covars$yreps50)))+
   labs(colour="SECTOR", x="observed", y="predicted")+
   geom_abline(aes(intercept=0, slope=1), colour="black")+
   theme(legend.position="bottom")
@@ -1421,10 +1420,10 @@ yrep.habid$HAB<-drop.levels(yrep.habid$HAB)
 fit<-ggplot(yrep.habid, aes(x=yrep.habid$y, y=yrep.habid$yreps50, group=HABITAT_CODE, color=HABITAT_CODE, shape=HABITAT_CODE))+
   scale_shape_manual(values=1:nlevels(yrep.habid$HABITAT_CODE))+
   geom_point()+
-  coord_cartesian(xlim=c(0,max(yrep.habid$y)), ylim=c(0,max(yrep.habid$yreps50)))+
   labs(x="observed", y="predicted")+
   ggtitle(levels(yrep.habid$SECTOR)[i])+
-  geom_abline(aes(intercept=0, slope=1), colour="black")
+  geom_abline(aes(intercept=0, slope=1), colour="black")+
+  theme(legend.position="bottom")
 pdf(file=paste("model3a_FullModel_PredictedVsObserved_HABITATCODE.pdf", sep=""))
 print(fit)
 dev.off()
@@ -1437,7 +1436,7 @@ for (i in 1:length(levels(yrep.habid$SECTOR)))
   fit<-ggplot(fit.sector, aes(x=fit.sector$y, y=fit.sector$yreps50, group=HABITAT_CODE, color=HABITAT_CODE, shape=HABITAT_CODE))+
     scale_shape_manual(values=1:nlevels(fit.sector$HABITAT_CODE))+
     geom_point()+
-    coord_cartesian(xlim=c(0,max(yrep.full.covars$y)), ylim=c(0,max(yrep.full.covars$yreps50)))+
+    coord_cartesian(xlim=c(min(yrep.full.covars$y),max(yrep.full.covars$y)), ylim=c(min(yrep.full.covars$yreps50),max(yrep.full.covars$yreps50)))+
     labs(x="observed", y="predicted")+
     ggtitle(levels(fit.sector$SECTOR)[i])+
     geom_abline(aes(intercept=0, slope=1), colour="black")
@@ -2281,7 +2280,7 @@ dev.off()
 
 
 #SAVE DATA
-#rm(z3a.pars, z3a.sim)
+#rm(z3a.burnin) # Throughout script above, z3a.burnin is parsed into z3a.pars, z3a.sim, z3a.yhumansim, etc - i.e., saving z3a.burnin is unecessary
 save.image(file="_bayesianSavedWorkspace_forReDoingOutputs.RData")
 
 
