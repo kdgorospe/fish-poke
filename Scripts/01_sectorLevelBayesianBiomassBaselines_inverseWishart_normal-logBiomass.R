@@ -120,7 +120,7 @@ common<-common[!(common %in% c("DATE_", "LATITUDE", "LONGITUDE"))]
 benthic<-subset(benthic, select=-c(DATE_, LATITUDE, LONGITUDE))
 common2<-c("SITE", "REGION", "ISLAND", "REEF_ZONE", "OBS_YEAR", "DEPTH_BIN")
 dat<-merge(dat, benthic, by=common2)
-write.csv(dat, file="~/Analyses/fish-stock/RESULTS/allDat_2012-2015_JOIN.csv", quote=FALSE)
+write.csv(dat, file="~/Analyses/_RESULTS/fish-stock/allDat_2012-2015_JOIN.csv", quote=FALSE)
 ### DAT drops from 744 rows to 730 rows (which sites are missing??)
 
 # Sites that drop out:
@@ -188,8 +188,8 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 
 #fish<-"INSTTotFishMinusSJRTB" # FULL DATASET - 730 sites
 #fish<-"PRIMARY" # 4 zeroes
-#fish<-"SECONDARY" # no zeroes
-fish<-"PLANKTIVORE" # 41 zeroes
+fish<-"SECONDARY" # no zeroes
+#fish<-"PLANKTIVORE" # 41 zeroes
 #fish<-"PISCIVORE" # 246 zeroes
 
 
@@ -201,12 +201,27 @@ focus <- paste("log",fish,sep="")
 response <- paste("log (", fish, " biomass)", sep="")
 
 ########################################## Histograms
-hist(dat[,fish],breaks=30,main=fish, xlab=indicator)
+num.zero<-sum(dat[,fish]==0)
+zero.text<-paste("Number of zeroes = ", num.zero, sep="")
+
+
+setwd("~/Analyses/_RESULTS/fish-stock")
+histfile<-paste("histo_", fish, "_.pdf", sep="")
+pdf(file=histfile)
+hist(dat[,fish],breaks=30,main=zero.text, xlab=indicator)
+text(zer.text)
+dev.off()
 # No longer exploring zero-inflation model
 #hist(dat[dat[,fish]>0, fish])
 
-hist(log(dat[,fish]),breaks=20,main=response, xlab=indicator)
+histfile<-paste("histo_", fish, "_ln.pdf", sep="")
+pdf(file=histfile)
+hist(log(dat[,fish]),breaks=20, main="ln biomass", xlab=indicator)
+dev.off()
 # Creates a more normal distribution
+
+
+
 # No longer exploring zero-inflation model
 #hist(log(dat[dat[,fish]>0,fish]))
 hist(dat$HARD_CORAL,breaks=10, xlab="Hard Coral")
@@ -288,7 +303,7 @@ names(dat)[which(names(dat)=="(dat$MEAN_Waves_MEAN)^2")]<-"meanWAVESsq"
 ################################################################################
 ################################################################################
 ################################################################################
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 
 ## USE covars LIST BELOW TO: (1) CREATE SCATTERPLOTS between RESPONSE and each COVAR
 ## (2) Test for colinearity
@@ -308,7 +323,7 @@ dat.covars<-na.omit(dat.covars)
 
 
 # PAIRWISE SCATTERPLOTS:
-#setwd("~/Analyses/RESULTS/fish-stock")
+#setwd("~/Analyses/_RESULTS/fish-stock")
 #pdf(file="01Figure_correlationpairs.pdf")
 #pairs(dat.covars)
 #dev.off()
@@ -327,12 +342,12 @@ write.csv(cor.spear, file="02cFigure_Cor.spear_0.5.csv")
 cor.spear.test<-abs(cor.spear)>0.5
 write.csv(cor.spear.test, file="02dFigure_Cor.spear_0.5.test.csv")
 
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="02eFigure_correlationVisual.pdf")
 corrplot(cor.covars, insig="p-value")
 dev.off()
 
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="02fFigure_correlationSpearVisual.pdf")
 corrplot(cor.spear, insig="p-value")
 dev.off()
@@ -352,7 +367,7 @@ y <- dat.scatter[[focus]]
 scatter.final<-as.data.frame(cbind(y, dat.scatter[covars], dat.scatter$ISLAND))
 names(scatter.final)[length(scatter.final)]<-"ISLAND"
 
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 
 # COMMENT OUT scatterplot outputs since these are the same for all repeat analyses
 for(i in 1:dim(scatter.final[covars])[2])
@@ -523,24 +538,23 @@ write.csv(vif.test.3, file="vif.test.3.csv", quote=FALSE)
 # REMOVE SST ANOM FREQ - not converging
 
 # LIST OF ALL VARIABLES THAT PASS COLLINEARITY / MULTI-COLLINEARITY tests:
-finalcovar <- c("Total.Coral", "Total.sqCoral", 
-                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
-                "DEPTH", "MEAN_SH", "VISIBILITY",
-                "MEAN_Chla_MEAN", "MEAN_Chla_ANOM_FREQ", 
-                "MEAN_SST_SD", "MEAN_SST_MEAN",
-                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
-                "logHUMANS20"
-                )      
-
-# LIST OF ALL SIGNIFICANT DRIVERS FOR FINAL MODEL:
 #finalcovar <- c("Total.Coral", "Total.sqCoral", 
 #                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
 #                "DEPTH", "MEAN_SH", "VISIBILITY",
-#                "MEAN_Chla_ANOM_FREQ", 
-#                "MEAN_SST_MEAN",
+#                "MEAN_Chla_MEAN", "MEAN_Chla_ANOM_FREQ", 
+#                "MEAN_SST_SD", "MEAN_SST_MEAN",
 #                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
 #                "logHUMANS20"
-#)      
+#                )      
+
+# LIST OF ALL SIGNIFICANT DRIVERS FOR FINAL MANUCRIPT (total fish or herbivores) MODEL:
+finalcovar <- c("Total.Coral", "Total.sqCoral", 
+                "SED_Sediment", "CCA_Coralline.Alga", 
+                "DEPTH", "MEAN_SH", "VISIBILITY",
+                "MEAN_SST_MEAN",
+                "MEAN_Waves_MEAN", "meanWAVESsq",
+                "logHUMANS20"
+)      
 
 
 Xb<-Xb[,finalcovar]
@@ -736,11 +750,10 @@ mhi.data <- list(y=y, Xb=Xb, N=nobs, nisland=nisland, W.B=W.B, nbeta=nbeta, SC=S
 ## MATCH chain.b with expected sign of each covariate in colnames(Xb) - this is used for supplying initial values to the MCMC
 chain.b<-c(1, 
            1, -1,
-           -1, -1, 1,  
+           -1, 1,
            1, 1, 1,
-           1, 1,
-           -1, -1,
-           1, -1, -1,
+           -1,
+           1, -1,
            -1)
 
 #           ,rep(0, numb.interactions))
@@ -933,8 +946,8 @@ start.time.coda<-Sys.time()
 #z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=50) 
 #n.iter=1000000 # one million
 #n.iter=500000 # LONG RUN
-#n.iter=200000 # NEW LONG RUN
-n.iter=50000 # SHORT RUN
+n.iter=200000 # NEW LONG RUN
+#n.iter=50000 # SHORT RUN
 #n.iter=5000 # PRACTICE RUN
 n.thin=10
 z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=n.thin) 
@@ -952,8 +965,8 @@ end.time.coda<-Sys.time()
 #z3a.burnin<-window(z3a.pars, start=burn.in)
 #burn.in <- 905000
 #burn.in <- 405000 # LONG RUN
-#burn.in <- 105000 # NEW LONG RUN
-burn.in <- 45000 # SHORT RUN
+burn.in <- 105000 # NEW LONG RUN
+#burn.in <- 45000 # SHORT RUN
 #burn.in <- 6000 # PRACTICE RUN
 z3a.burnin<-window(z3a, start=burn.in)
 #rm(z3a)
@@ -1070,7 +1083,7 @@ z3a.pars<-z3a.burnin[,c(B.cols, mu.bIS.cols, mu.bRG.cols, rho.bIS.cols, rho.bRG.
 ####################################################################################
 ####################################################################################
 # TRACEPLOTS
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 png(filename="model3a_traceplot%01d.png", width=1080, height=960, pointsize=24)
 plot(z3a.pars) 
 dev.off()
@@ -1147,7 +1160,7 @@ for(i in 1:length(par.names))
 # All parameter graphs above need to be further subdivided (except sig.y, rho.bRG, and sigma.bRG)
 
 # SPLIT UP B matrix graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   B.plot<-B[((i*nsector)-(nsector-1)):(i*nsector),]
@@ -1166,7 +1179,7 @@ for(i in 1:length(drivers))
 }
 
 # SPLIT UP mu.bIS graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   mu.bIS.plot<-mu.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1185,7 +1198,7 @@ for(i in 1:length(drivers))
 }
 
 # SPLIT UP rho.bIS graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 corr.pairs<-length(reg.corr.combo)
 for(i in 1:length(isles))
 {
@@ -1207,7 +1220,7 @@ for(i in 1:length(isles))
 
 
 # SPLIT UP sigma.bIS graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   sigma.bIS.plot<-sigma.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1489,7 +1502,7 @@ sigma.bRG<-coeff.df[grep("sigma.bRG", rownames(coeff.df)),]
 par.names<-c("B", "mu.bIS", "mu.bRG", "rho.bIS", "rho.bRG", "sig.y", "sigma.bIS", "sigma.bRG")
 
 # BRUTE FORCE PLOT:
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(par.names))
 {
   par.plot<-get(par.names[i])
@@ -1512,7 +1525,7 @@ for(i in 1:length(par.names))
 # All parameter graphs above need to be further subdivided (except sig.y, rho.bRG, and sigma.bRG)
 
 # SPLIT UP B Matrix
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   B.plot<-B[((i*nsector)-(nsector-1)):(i*nsector),] # Get b estimates
@@ -1565,7 +1578,7 @@ for(i in 1:length(drivers))
 #dev.off()
 
 # SPLIT UP mu.bIS graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   mu.bIS.plot<-mu.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1584,7 +1597,7 @@ for(i in 1:length(drivers))
 }
 
 # SPLIT UP rho.bIS graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 corr.pairs<-length(reg.corr.combo)
 for(i in 1:length(isles))
 {
@@ -1604,7 +1617,7 @@ for(i in 1:length(isles))
 }
 
 # SPLIT UP sigma.bIS graph
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 for(i in 1:length(drivers))
 {
   sigma.bIS.plot<-sigma.bIS[((i*nisland)-(nisland-1)):(i*nisland),]
@@ -1949,7 +1962,7 @@ dat.deplete[,2:11]<-exp(dat[,2:11])
 percentDepletion<-100-(dat.deplete$PresentDay/dat.deplete$MinimalImpact)*100
 deplete.table<-as.data.frame(cbind(as.character(dat.deplete$SC), percentDepletion))
 names(deplete.table)[1]<-"SC"
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 write.csv(deplete.table, file="sectorLevel_percentDepletion.csv", quote=FALSE, row.names=FALSE)
 
 
@@ -1979,7 +1992,7 @@ p=ggplot(data=dat.graph, aes(x=SC, y=value, fill=variable)) +
         axis.text.x=element_text(angle=90, hjust=0, vjust=0.5, colour="black", size=10),
         legend.position="bottom", legend.title=element_blank()) +
   geom_errorbar(aes(ymin=dat.graph$Lower, ymax=dat.graph$Upper, colour=variable), position=position_dodge(width=1))
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_logBiomass-unordered_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2018,7 +2031,7 @@ p<-ggplot(data=dat, aes(x=SC, y=MinimalImpact)) +
   theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
         legend.position="none") +
   coord_flip()
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_logBiomass_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2035,7 +2048,7 @@ p=ggplot(data=dat.unordered.bt, aes(x=SC, y=value, fill=variable)) +
         legend.position="bottom", legend.title=element_blank()) +
   geom_errorbar(aes(ymin=Lower, ymax=Upper, colour=variable), position=position_dodge(width=1))
 
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_backtransBiomass-unordered_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2054,7 +2067,7 @@ p<-ggplot(data=dat.bt, aes(x=SC, y=MinimalImpact)) +
   theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
         legend.position="none") +
   coord_flip()
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelModeledMinimalImpact_backtransBiomass_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2146,7 +2159,7 @@ p<-ggplot(data=dat, aes(x=SC, y=MidRP)) +
   theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
         legend.position="none") +
   coord_flip()
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelRecoveryPotential_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2232,7 +2245,7 @@ p=ggplot(data=dat, aes(x=SC, y=Mid)) +
         axis.text.x=element_text(angle=90, hjust=0, vjust=0.5, colour="black", size=10),
         legend.position="bottom", legend.title=element_blank()) +
   geom_errorbar(aes(ymin=dat$Lower, ymax=dat$Upper))
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelPercentRecoveryPotential-unordered_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
@@ -2261,7 +2274,7 @@ p<-ggplot(data=dat, aes(x=SC, y=MidPercent)) +
   theme(text = element_text(size=18), axis.text.x=element_text(vjust=0.5, colour="black", size=18), 
         legend.position="none") +
   coord_flip()
-setwd("~/Analyses/RESULTS/fish-stock")
+setwd("~/Analyses/_RESULTS/fish-stock")
 pdf(file="sectorLevelPercentRecoveryPotential_independentChains_avgQuantiles.pdf")
 print(p)
 dev.off()
