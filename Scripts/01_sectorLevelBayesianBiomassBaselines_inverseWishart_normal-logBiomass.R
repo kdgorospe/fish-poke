@@ -188,8 +188,8 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 
 #fish<-"INSTTotFishMinusSJRTB" # FULL DATASET - 730 sites
 #fish<-"PRIMARY" # 4 zeroes
-fish<-"SECONDARY" # no zeroes
-#fish<-"PLANKTIVORE" # 41 zeroes
+#fish<-"SECONDARY" # no zeroes
+fish<-"PLANKTIVORE" # 41 zeroes
 #fish<-"PISCIVORE" # 246 zeroes
 
 
@@ -211,7 +211,6 @@ pdf(file=histfile)
 hist(dat[,fish],breaks=30,main=zero.text, xlab=indicator)
 text(zer.text)
 dev.off()
-# No longer exploring zero-inflation model
 #hist(dat[dat[,fish]>0, fish])
 
 histfile<-paste("histo_", fish, "_ln.pdf", sep="")
@@ -244,15 +243,20 @@ hist(log(dat$HUMANS200),breaks=10, xlab="Humans 200")
 #dat<-dat[dat[,fish]>0,]
 
 
-### FOR OTHER ANALYSES with more zero-inflation, replace zeroes with small number
-dat[,fish][(dat[,fish]==0)]<-0.01
+### FOR PLANKTIVORE ANALYSIS with more zero-inflation, replace zeroes with small number
+if(fish="PLANKTIVORE")
+{
+dat[,fish][(dat[,fish]==0)]<-0.0001
 hist(dat[,fish],breaks=30,main=fish, xlab=indicator)
 
 # now log
 dat <- cbind(dat, log(dat[,fish])) # No longer need + 1 since this isn't a zero-inflated model
 names(dat)[grep("fish", names(dat))]<-paste("log",fish,sep="")
+plankfile<-paste("histo_", fish, "_ln.pdf", sep="")
+pdf(file=plankfile) # ie - REPLACE ln(biomass) graph outputed above which automatically removed undefined zeroes
 hist(dat[,(paste("log",fish,sep=""))],breaks=30,main=fish, xlab=indicator)
-
+dev.off()
+}
 
 
 #biomass<-grep(paste("log",fish,sep=""), names(dat))
@@ -546,6 +550,15 @@ write.csv(vif.test.3, file="vif.test.3.csv", quote=FALSE)
 #                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
 #                "logHUMANS20"
 #                )      
+
+# PLANKTIVORE: Significant Drivers ONLY
+#finalcovar <- c("Total.Coral", "Total.sqCoral", 
+#                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
+#                "DEPTH", "MEAN_SH", "VISIBILITY",
+#                "MEAN_Chla_MEAN",
+#                "MEAN_Waves_MEAN", "meanWAVESsq",
+#                "logHUMANS20"
+#)      
 
 # LIST OF ALL SIGNIFICANT DRIVERS FOR FINAL MANUCRIPT (total fish or herbivores) MODEL:
 finalcovar <- c("Total.Coral", "Total.sqCoral", 
@@ -946,8 +959,8 @@ start.time.coda<-Sys.time()
 #z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=50) 
 #n.iter=1000000 # one million
 #n.iter=500000 # LONG RUN
-n.iter=200000 # NEW LONG RUN
-#n.iter=50000 # SHORT RUN
+#n.iter=200000 # NEW LONG RUN
+n.iter=50000 # SHORT RUN
 #n.iter=5000 # PRACTICE RUN
 n.thin=10
 z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=n.thin) 
@@ -965,8 +978,8 @@ end.time.coda<-Sys.time()
 #z3a.burnin<-window(z3a.pars, start=burn.in)
 #burn.in <- 905000
 #burn.in <- 405000 # LONG RUN
-burn.in <- 105000 # NEW LONG RUN
-#burn.in <- 45000 # SHORT RUN
+#burn.in <- 105000 # NEW LONG RUN
+burn.in <- 45000 # SHORT RUN
 #burn.in <- 6000 # PRACTICE RUN
 z3a.burnin<-window(z3a, start=burn.in)
 rm(z3a)
@@ -1818,9 +1831,8 @@ coverage.2.sector<-round(coverage.sector, digits=2)
 fit<-ggplot(sector.dat, aes(x=sector.dat$y.mean, y=sector.dat$Predicted))+
   geom_point(x=sector.dat$y.mean, y=sector.dat$Predicted)+
   geom_errorbar(aes(ymin=sector.dat$Lower, ymax=sector.dat$Upper))+
-  coord_cartesian(xlim=c(0,max(sector.dat$y.mean)), ylim=c(0,max(sector.dat$Upper)))+
-  annotate("text", x=0, y=max(sector.dat$Predicted), hjust=0, label=paste("R squared = ", r.sq.2.sector, sep=""))+
-  annotate("text", x=0, y=max(sector.dat$Predicted)*0.95, hjust=0, label=paste("Coverage = ", coverage.2.sector, "%", sep=""))+
+  annotate("text", x=min(sector.dat$y.mean), y=max(sector.dat$Predicted), hjust=0, label=paste("R squared = ", r.sq.2.sector, sep=""))+
+  annotate("text", x=min(sector.dat$y.mean), y=max(sector.dat$Predicted)*0.75, hjust=0, label=paste("Coverage = ", coverage.2.sector, "%", sep=""))+
   labs(x="observed", y="predicted")+
   geom_abline(aes(intercept=0, slope=1), colour="black")
 pdf(file="model3a_FullModel_predictedVsObserved_sectorLevel.pdf")
