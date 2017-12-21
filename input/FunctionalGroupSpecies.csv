@@ -1,0 +1,246 @@
+Code,SCIENTIFIC NAME,Functional group,SPC_Bio,%comp
+CEAR,Cephalopholis argus,Fish Benthic Piscivores,1.103525287,69.8%
+GYFL,Gymnothorax flavimarginatus,Fish Benthic Piscivores,0.193641316,12.3%
+OXUN,Oxycheilinus unifasciatus,Fish Benthic Piscivores,0.107399906,6.8%
+GYME,Gymnothorax meleagris,Fish Benthic Piscivores,0.055274506,3.5%
+PAFO,Paracirrhites forsteri,Fish Benthic Piscivores,0.050767139,3.2%
+AUCH,Aulostomus chinensis,Fish Benthic Piscivores,0.025529872,1.6%
+GYJA,Gymnothorax javanicus,Fish Benthic Piscivores,0.017552377,1.1%
+GYUN,Gymnothorax undulatus,Fish Benthic Piscivores,0.014018108,0.9%
+SCDI,Scorpaenopsis diabolus,Fish Benthic Piscivores,0.003666171,0.2%
+GYSP,Gymnothorax sp,Fish Benthic Piscivores,0.003009237,0.2%
+ENCA,Enchelynassa canina,Fish Benthic Piscivores,0.00159675,0.1%
+LIZA,Synodontidae,Fish Benthic Piscivores,0.00151424,0.1%
+SCPP,Scorpaenopsis sp,Fish Benthic Piscivores,0.000992214,0.1%
+SCCA,Scorpaenopsis cacopsis,Fish Benthic Piscivores,0.000848835,0.1%
+PTSP,Pterois sphex,Fish Benthic Piscivores,0.000484008,0.0%
+CONG,Congridae,Fish Benthic Piscivores,0.000333025,0.0%
+SAFL,Saurida flamma,Fish Benthic Piscivores,0.000184482,0.0%
+GYST,Gymnothorax steindachneri,Fish Benthic Piscivores,5.47215E-05,0.0%
+SEBA,Sebastapistes ballieui,Fish Benthic Piscivores,3.10292E-05,0.0%
+SYVA,Synodus variegatus,Fish Benthic Piscivores,2.98166E-05,0.0%
+TATR,Taenianotus triacanthus,Fish Benthic Piscivores,1.8557E-05,0.0%
+SYBI,Synodus binotatus,Fish Benthic Piscivores,5.70081E-07,0.0%
+NALI,Naso lituratus,Fish Browsers,0.706814335,35.9%
+CHUB,Kyphosus sp,Fish Browsers,0.697497259,35.5%
+NAUN,Naso unicornis,Fish Browsers,0.434784532,22.1%
+CACA,Calotomus carolinus,Fish Browsers,0.098026556,5.0%
+CHCH,Chanos chanos,Fish Browsers,0.011641377,0.6%
+KYCI,Kyphosus cinerascens,Fish Browsers,0.006909533,0.4%
+CAZO,Calotomus zonarchus,Fish Browsers,0.006536939,0.3%
+KYVA,Kyphosus vaigiensis,Fish Browsers,0.002112645,0.1%
+KYSA,Kyphosus sandwicensis,Fish Browsers,0.00200903,0.1%
+CHOR,Chaetodon ornatissimus,Fish Coralivores,0.118618309,33.6%
+CHMU,Chaetodon multicinctus,Fish Coralivores,0.070533092,20.0%
+CHQU,Chaetodon quadrimaculatus,Fish Coralivores,0.067224649,19.1%
+PLJO,Plectroglyphidodon johnstonianus,Fish Coralivores,0.047272833,13.4%
+CHUN,Chaetodon unimaculatus,Fish Coralivores,0.034210531,9.7%
+ARME,Arothron meleagris,Fish Coralivores,0.008316233,2.4%
+CHLT,Chaetodon lunulatus,Fish Coralivores,0.005330686,1.5%
+EXBR,Exallias brevis,Fish Coralivores,0.000724691,0.2%
+CHRE,Chaetodon reticulatus,Fish Coralivores,0.000165272,0.0%
+CHME,Chaetodon meyeri,Fish Coralivores,0.000118397,0.0%
+SCRU,Scarus rubroviolaceus,Fish Excavaters,1.21489917,70.5%
+CHSO,Chlorurus sordidus,Fish Excavaters,0.36774605,21.3%
+CHPE,Chlorurus perspicillatus,Fish Excavaters,0.115696331,6.7%
+PARR,Scaridae,Fish Excavaters,0.025661652,1.5%
+SCSP,Scarus sp,Fish Excavaters,0.000415638,0.0%
+ACOL,Acanthurus olivaceus,Fish Grazer/Detritivores,2.286667489,30.8%
+ACNF,Acanthurus nigrofuscus,Fish Grazer/Detritivores,1.307924424,17.6%
+ACDU,Acanthurus dussumieri,Fish Grazer/Detritivores,0.902619577,12.2%
+ACBL,Acanthurus blochii,Fish Grazer/Detritivores,0.619469599,8.4%
+CTST,Ctenochaetus strigosus,Fish Grazer/Detritivores,0.616338553,8.3%
+MEVI,Melichthys vidua,Fish Grazer/Detritivores,0.531390371,7.2%
+ZEFL,Zebrasoma flavescens,Fish Grazer/Detritivores,0.331603874,4.5%
+ACTR,Acanthurus triostegus,Fish Grazer/Detritivores,0.200627073,2.7%
+ACXA,Acanthurus xanthopterus,Fish Grazer/Detritivores,0.134977899,1.8%
+ACLE,Acanthurus leucopareius,Fish Grazer/Detritivores,0.088103257,1.2%
+ACNR,Acanthurus nigroris,Fish Grazer/Detritivores,0.08769353,1.2%
+STFA,Stegastes fasciolatus,Fish Grazer/Detritivores,0.086850805,1.2%
+CTHA,Ctenochaetus hawaiiensis,Fish Grazer/Detritivores,0.047968596,0.6%
+ACAC,Acanthurus achilles,Fish Grazer/Detritivores,0.042384283,0.6%
+CEPO,Centropyge potteri,Fish Grazer/Detritivores,0.02972757,0.4%
+ABSO,Abudefduf sordidus,Fish Grazer/Detritivores,0.026388734,0.4%
+ZEVE,Zebrasoma veliferum,Fish Grazer/Detritivores,0.025996621,0.4%
+CASA,Cantherhines sandwichiensis,Fish Grazer/Detritivores,0.017813538,0.2%
+ACNC,Acanthurus nigricans,Fish Grazer/Detritivores,0.014173226,0.2%
+CEFI,Centropyge fisheri,Fish Grazer/Detritivores,0.006093093,0.1%
+CAAM,Canthigaster amboinensis,Fish Grazer/Detritivores,0.004057824,0.1%
+ACGU,Acanthurus guttatus,Fish Grazer/Detritivores,0.001473338,0.0%
+PLSI,Plectroglyphidodon sindonis,Fish Grazer/Detritivores,0.001107343,0.0%
+CIVA,Cirripectes vanderbilti,Fish Grazer/Detritivores,0.001075234,0.0%
+CAEP,Canthigaster epilampra,Fish Grazer/Detritivores,0.00036838,0.0%
+CELO,Centropyge loricula,Fish Grazer/Detritivores,0.000237176,0.0%
+CIOB,Cirripectes obscurus,Fish Grazer/Detritivores,0.000115949,0.0%
+SURG,Acanthuridae,Fish Grazer/Detritivores,0.000109951,0.0%
+ACAN,Acanthurus achillesXnigricans hybrid= rackliffei,Fish Grazer/Detritivores,4.11489E-05,0.0%
+CISP,Cirripectes sp,Fish Grazer/Detritivores,7.08691E-06,0.0%
+SUFR,Sufflamen fraenatum,Fish Invertivores,0.918206788,31.3%
+SUBU,Sufflamen bursa,Fish Invertivores,0.388190716,6.3%
+THDU,Thalassoma duperrey,Fish Invertivores,0.357304577,5.8%
+RHRE,Rhinecanthus rectangulus,Fish Invertivores,0.19242954,3.1%
+PAAR,Paracirrhites arcatus,Fish Invertivores,0.192349759,3.1%
+ZACO,Zanclus cornutus,Fish Invertivores,0.165571405,2.7%
+COGA,Coris gaimard,Fish Invertivores,0.054250971,0.9%
+CHLU,Chaetodon lunula,Fish Invertivores,0.053019268,0.9%
+STBA,Stethojulis balteata,Fish Invertivores,0.05218533,0.8%
+THBA,Thalassoma ballieui,Fish Invertivores,0.043135348,0.7%
+CAJA,Canthigaster jactator,Fish Invertivores,0.042054387,0.7%
+COVE,Coris venusta,Fish Invertivores,0.041144718,0.7%
+GOVA,Gomphosus varius,Fish Invertivores,0.036986668,0.6%
+HAOR,Halichoeres ornatissimus,Fish Invertivores,0.034422814,0.6%
+CADU,Cantherhines dumerilii,Fish Invertivores,0.032500036,0.5%
+FOFL,Forcipiger flavissimus,Fish Invertivores,0.028261688,0.5%
+CHAU,Chaetodon auriga,Fish Invertivores,0.02621012,0.4%
+PLIM,Plectroglyphidodon imparipennis,Fish Invertivores,0.025313496,0.4%
+ANCU,Anampses cuvier,Fish Invertivores,0.018290072,0.3%
+APAR,Apolemichthys arcuatus,Fish Invertivores,0.017323362,0.3%
+CHFR,Chaetodon fremblii,Fish Invertivores,0.016357563,0.3%
+MABR,Malacanthus brevirostris,Fish Invertivores,0.015519989,0.3%
+PSOC,Pseudocheilinus octotaenia,Fish Invertivores,0.01504967,0.2%
+PSCE,Pseudojuloides cerasinus,Fish Invertivores,0.014624009,0.2%
+PSEV,Pseudocheilinus evanidus,Fish Invertivores,0.012942193,0.2%
+CIFA,Cirrhitops fasciatus,Fish Invertivores,0.011845032,0.2%
+DIHY,Diodon hystrix,Fish Invertivores,0.010355189,0.2%
+CACO,Canthigaster coronata,Fish Invertivores,0.008811585,0.1%
+COBA,Coris ballieui,Fish Invertivores,0.008150096,0.1%
+MAGE,Macropharyngodon geoffroy,Fish Invertivores,0.007873104,0.1%
+OSME,Ostracion meleagris,Fish Invertivores,0.00629668,0.1%
+BAPO,Balistes polylepis,Fish Invertivores,0.006041034,0.1%
+FOLO,Forcipiger longirostris,Fish Invertivores,0.005721092,0.1%
+PSTE,Pseudocheilinus tetrataenia,Fish Invertivores,0.005398121,0.1%
+PEAS,Pervagor aspricaudus,Fish Invertivores,0.005161235,0.1%
+RHAC,Rhinecanthus aculeatus,Fish Invertivores,0.004572066,0.1%
+LAPH,Labroides phthirophagus,Fish Invertivores,0.004498098,0.1%
+ANCH,Anampses chrysocephalus,Fish Invertivores,0.00393058,0.1%
+TRIG,Balistidae,Fish Invertivores,0.00386428,0.1%
+NOTA,Novaculichthys taeniourus,Fish Invertivores,0.003377421,0.1%
+CHIN,Cheilio inermis,Fish Invertivores,0.003360927,0.1%
+ARHI,Arothron hispidus,Fish Invertivores,0.002671132,0.0%
+PESP,Pervagor spilosoma,Fish Invertivores,0.002390851,0.0%
+PASC,Parapercis schauinslandii,Fish Invertivores,0.002064423,0.0%
+CHLI,Chaetodon lineolatus,Fish Invertivores,0.001945056,0.0%
+INAN,Iniistius aneitensis,Fish Invertivores,0.001881873,0.0%
+CHEP,Chaetodon ephippium,Fish Invertivores,0.00184579,0.0%
+GYEU,Gymnothorax eurostus,Fish Invertivores,0.001783385,0.0%
+GYZE,Gymnomuraena zebra,Fish Invertivores,0.001286012,0.0%
+DIHO,Diodon holocanthus,Fish Invertivores,0.001220895,0.0%
+PLGO,Plagiotremus goslinei,Fish Invertivores,0.000826273,0.0%
+GYRU,Gymnothorax rueppellii,Fish Invertivores,0.000634142,0.0%
+PLEW,Plagiotremus ewaensis,Fish Invertivores,0.00057876,0.0%
+THQU,Thalassoma quinquevittatum,Fish Invertivores,0.000422431,0.0%
+CHTI,Chaetodon tinkeri,Fish Invertivores,0.000360306,0.0%
+WRAS,Labridae,Target BC,0.000369212,0.0%
+ALSC,Aluterus scriptus,Fish Invertivores,0.00024674,0.0%
+SECO,Sebastapistes coniorta,Fish Invertivores,0.000242392,0.0%
+OXBI,Oxycheilinus bimaculatus,Target BC,0.022069623,0.7%
+DEBA,Dendrochirus barberi,Fish Invertivores,0.000172374,0.0%
+INUM,Iniistius umbrilatus,Fish Invertivores,0.000131979,0.0%
+PUFF,Tetraodontidae,Fish Invertivores,0.000131908,0.0%
+THLU,Thalassoma lutescens,Fish Invertivores,0.000128502,0.0%
+GYMT,Gymnothorax melatremus,Fish Invertivores,0.000117996,0.0%
+CATY,Caracanthus typicus,Fish Invertivores,0.00010815,0.0%
+GOBI,Gobiidae,Fish Invertivores,8.4161E-05,0.0%
+LAFO,Lactoria fornasini,Fish Invertivores,6.68683E-05,0.0%
+ECNE,Echidna nebulosa,Fish Invertivores,4.79293E-05,0.0%
+AMBI,Amblycirrhitus bimacula,Fish Invertivores,3.94408E-06,0.0%
+THDQ,Thalassoma duperrey/quinquevittatum hybrid,Fish Invertivores,2.67614E-07,0.0%
+LUKA,Lutjanus kasmira,Target BC,1.003270127,31.0%
+BOBI,Bodianus bilunulatus,Target BC,0.910682239,28.1%
+PAMU,Parupeneus multifasciatus,Target BC,0.309421069,9.6%
+LUFU,Lutjanus fulvus,Target BC,0.251148837,7.8%
+PACY,Parupeneus cyclostomus,Target BC,0.168302911,5.2%
+MUFL,Mulloidichthys flavolineatus,Target BC,0.123812075,3.8%
+MUVA,Mulloidichthys vanicolensis,Target BC,0.10682241,3.3%
+PAIN,Parupeneus insularis,Target BC,0.094456552,2.9%
+COFL,Coris flavovittata,Target BC,0.056199568,1.7%
+PAPL,Parupeneus pleurostigma,Target BC,0.03736747,1.2%
+PAPO,Parupeneus porphyreus,Target BC,0.029922535,0.9%
+CIPI,Cirrhitus pinnulatus,Target BC,0.02730309,0.8%
+SATI,Sargocentron tiere,Target BC,0.024326413,0.8%
+SADI,Sargocentron diadema,Target BC,0.01807942,0.6%
+SASP,Sargocentron spiniferum,Target BC,0.017580592,0.5%
+MUPF,Mulloidichthys pfluegeri,Target BC,0.0084645,0.3%
+NESA,Neoniphon sammara,Target BC,0.007917332,0.2%
+SAPP,Sargocentron sp,Target BC,0.007908806,0.2%
+SAXA,Sargocentron xantherythrum,Target BC,0.007865408,0.2%
+THPU,Thalassoma purpureum,Target BC,0.009828748,0.3%
+THTR,Thalassoma trilobatum,Target BC,0.009690526,0.3%
+OPPU,Oplegnathus punctatus,Target BC,0.005246223,0.2%
+BOMA,Bothus mancus,Target BC,0.003153281,0.1%
+INPA,Iniistius pavo,Target BC,4.50464E-05,0.0%
+MUMI,Mulloidichthys mimicus,Target BC,3.86983E-05,0.0%
+GOAT,Mullidae,Target BC,2.50035E-07,0.0%
+MENI,Melichthys niger,Fish Planktivores,0.804034062,49.0%
+CHVA,Chromis vanderbilti,Fish Planktivores,0.220427024,13.4%
+CHVE,Chromis verater,Fish Planktivores,0.101820234,6.2%
+DAAL,Dascyllus albisella,Fish Planktivores,0.086026651,5.2%
+HEDI,Heniochus diphreutes,Fish Planktivores,0.062499291,3.8%
+ABAB,Abudefduf abdominalis,Fish Planktivores,0.060633215,3.7%
+CHOV,Chromis ovalis,Fish Planktivores,0.058388274,3.6%
+CHMI,Chaetodon miliaris,Fish Planktivores,0.054425733,3.3%
+ACTH,Acanthurus thompsoni,Fish Planktivores,0.04748034,2.9%
+CHKL,Chaetodon kleinii,Fish Planktivores,0.038322626,2.3%
+XAAU,Xanthichthys auromarginatus,Fish Planktivores,0.017069047,1.0%
+CHHA,Chromis hanui,Fish Planktivores,0.015917674,1.0%
+ABVA,Abudefduf vaigiensis,Fish Planktivores,0.015801911,1.0%
+APKA,Apogon kallopterus,Fish Planktivores,0.015559417,0.9%
+CHAG,Chromis agilis,Fish Planktivores,0.013788653,0.8%
+PTHE,Ptereleotris heteroptera,Fish Planktivores,0.007831825,0.5%
+HETH,Hemitaurichthys thompsoni,Fish Planktivores,0.00572782,0.3%
+HEPO,Hemitaurichthys polylepis,Fish Planktivores,0.003963698,0.2%
+PSBI,Pseudanthias bicolor,Fish Planktivores,0.003783214,0.2%
+CHAC,Chromis acares,Fish Planktivores,0.001762993,0.1%
+BLEN,Blenniidae,Fish Planktivores,0.001528586,0.1%
+CHLC,Chromis leucura,Fish Planktivores,0.00077321,0.0%
+GUCU,Gunnellichthys curiosus,Fish Planktivores,0.000747005,0.0%
+APSP,Apogon sp,Fish Planktivores,0.000424654,0.0%
+CIJO,Cirrhilabrus jordani,Fish Planktivores,0.000175202,0.0%
+PSHW,Pseudanthias ventralis hawaiiensis,Fish Planktivores,0.000174832,0.0%
+OXTY,Oxycirrhites typus,Fish Planktivores,0.000115809,0.0%
+APMA,Apogon maculiferus,Fish Planktivores,6.50636E-05,0.0%
+NEMA,Nemateleotris magnifica,Fish Planktivores,1.23883E-06,0.0%
+NAHE,Naso hexacanthus,Large Planktivores,0.472374915,42.2%
+NABR,Naso brevirostris,Large Planktivores,0.289458736,25.8%
+MYBE,Myripristis berndti,Large Planktivores,0.233207977,20.8%
+MYKU,Myripristis kuntee,Large Planktivores,0.095464773,8.5%
+MYAM,Myripristis amaena,Large Planktivores,0.015252949,1.4%
+PRME,Priacanthus meeki,Large Planktivores,0.004075971,0.4%
+MYSP,Myripristinae,Large Planktivores,0.003284377,0.3%
+NASP,Naso sp,Large Planktivores,0.002352902,0.2%
+HECR,Heteropriacanthus cruentatus,Large Planktivores,0.002277412,0.2%
+NAAN,Naso annulatus,Large Planktivores,0.00166232,0.1%
+KUSA,Kuhlia sandvicensis,Large Planktivores,0.000524853,0.0%
+MYVI,Myripristis vittata,Large Planktivores,0.000303719,0.0%
+APVI,Aprion virescens,Fish Roving Piscivores,1.021821843,#N/A
+CAME,Caranx melampygus,Fish Roving Piscivores,0.583927832,#N/A
+CAIG,Caranx ignobilis,Fish Roving Piscivores,0.342585316,#N/A
+SEDU,Seriola dumerili,Fish Roving Piscivores,0.276826087,#N/A
+ALCI,Alectis ciliaris,Fish Roving Piscivores,#N/A,#N/A
+CAFE,Carangoides ferdau,Fish Roving Piscivores,0.036908404,#N/A
+CAOR,Carangoides orthogrammus,Fish Roving Piscivores,0.023541563,#N/A
+CASE,Caranx sexfasciatus,Fish Roving Piscivores,#N/A,#N/A
+PSDE,Pseudocaranx dentex,Fish Roving Piscivores,#N/A,#N/A
+SPBA,Sphyraena barracuda,Fish Roving Piscivores,0.008736251,#N/A
+GNSP,Gnathanodon speciosus,Fish Roving Piscivores,#N/A,#N/A
+SCLY,Scomberoides lysan,Fish Roving Piscivores,0.004913728,#N/A
+SPHE,Sphyraena helleri,Fish Roving Piscivores,6.91362E-05,#N/A
+SPLE,Sphyrna lewini,Fish Roving Piscivores,#N/A,#N/A
+SPQE,Sphyraena qenie,Fish Roving Piscivores,#N/A,#N/A
+CASP,Caranx sp,Fish Roving Piscivores,#N/A,#N/A
+APFU,Aphareus furca,Fish Roving Piscivores,0.104272267,#N/A
+FICO,Fistularia commersonii,Fish Roving Piscivores,0.027056872,#N/A
+TYCR,Tylosurus crocodilus,Fish Roving Piscivores,0.010481841,#N/A
+ELBI,Elagatis bipinnulata,Fish Roving Piscivores,0.004512332,#N/A
+PLAR,Platybelone argalus,Fish Roving Piscivores,#N/A,#N/A
+NEED,Belonidae,Fish Roving Piscivores,2.29807E-06,#N/A
+SCPS,Scarus psittacus,Fish Scaper,0.290733119,81.4%
+SCDU,Scarus dubius,Fish Scaper,0.066545696,18.6%
+DEMA,Decapterus macarellus,Shallow Prey,0.420897142,99.9%
+SECR,Selar crumenophthalmus,Shallow Prey,0.000224288,0.1%
+AENA,Aetobatus narinari,Fish Invertivores,0.054477987,0.9%
+CAML,Carcharhinus melanopterus,Sharks,#N/A,#N/A
+CAAB,Carcharhinus amblyrhynchos,Sharks,0.058276333,#N/A
+TROB,Triaenodon obesus,Sharks,0.043172965,#N/A
+CAGA,Carcharhinus galapagensis,Sharks,#N/A,#N/A
+GACU,Galeocerdo cuvier,Sharks,#N/A,#N/A
