@@ -11,8 +11,9 @@ library(corrplot)
 ##### CHANGE RESPONSE VARIABLE AS NEEDED: "PRIMARY" VS "INSTTotFishMinusSJRTB"
 
 setwd("~/Analyses/fish-stock")
-load("~/Analyses/fish-stock/input/TMPwsd_MHI_AllHerbivoresThru2016.RData") # by CONSUMER GROUPS
+#load("~/Analyses/fish-stock/input/TMPwsd_MHI_AllHerbivoresThru2016.RData") # by CONSUMER GROUPS
 #load("~/Analyses/fish-stock/input/TMPwsd_REAthru2017-SpeciesLevel.RData") # by SPECIES
+load("~/Analyses/fish-stock/input/TMPwsd_FunctionalGroupMHI-REAthru2015.RData") # by FUNCTIONAL GROUP
 mhi<-wsd
 
 
@@ -185,14 +186,21 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 ################################################
 ### Select which SPECIES/GROUP on which to focus:
 
-
+# TOTAL REEF FISH
 #fish<-"INSTTotFishMinusSJRTB" # FULL DATASET - 730 sites
+
+# CONSUMER GROUPS
 #fish<-"PRIMARY" # 4 zeroes
 #fish<-"SECONDARY" # no zeroes
-fish<-"PLANKTIVORE" # 41 zeroes
+#fish<-"PLANKTIVORE" # 41 zeroes
 #fish<-"PISCIVORE" # 246 zeroes
 
-
+# FUNCTIONAL GROUPS
+fish<-"Fish Invertivores"
+  
+  
+  
+  
 ######################################### Select response column
 #indicator <- "Site-level Average Length"
 indicator <- "Site-level Biomass"
@@ -209,7 +217,6 @@ setwd("~/Analyses/_RESULTS/fish-stock")
 histfile<-paste("histo_", fish, "_.pdf", sep="")
 pdf(file=histfile)
 hist(dat[,fish],breaks=30,main=zero.text, xlab=indicator)
-text(zer.text)
 dev.off()
 #hist(dat[dat[,fish]>0, fish])
 
@@ -542,14 +549,14 @@ write.csv(vif.test.3, file="vif.test.3.csv", quote=FALSE)
 # REMOVE SST ANOM FREQ - not converging
 
 # LIST OF ALL VARIABLES THAT PASS COLLINEARITY / MULTI-COLLINEARITY tests:
-#finalcovar <- c("Total.Coral", "Total.sqCoral", 
-#                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
-#                "DEPTH", "MEAN_SH", "VISIBILITY",
-#                "MEAN_Chla_MEAN", "MEAN_Chla_ANOM_FREQ", 
-#                "MEAN_SST_SD", "MEAN_SST_MEAN",
-#                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
-#                "logHUMANS20"
-#                )      
+finalcovar <- c("Total.Coral", "Total.sqCoral", 
+                "MA_Macroalga", "SED_Sediment", "CCA_Coralline.Alga", 
+                "DEPTH", "MEAN_SH", "VISIBILITY",
+                "MEAN_Chla_MEAN", "MEAN_Chla_ANOM_FREQ", 
+                "MEAN_SST_SD", "MEAN_SST_MEAN",
+                "MEAN_Waves_MEAN", "meanWAVESsq", "MEAN_Waves_ANOM_FREQ",
+                "logHUMANS20"
+                )      
 
 # PLANKTIVORE: Significant Drivers ONLY
 #finalcovar <- c("Total.Coral", "Total.sqCoral", 
@@ -561,13 +568,13 @@ write.csv(vif.test.3, file="vif.test.3.csv", quote=FALSE)
 #)      
 
 # LIST OF ALL SIGNIFICANT DRIVERS FOR FINAL MANUCRIPT (total fish or herbivores) MODEL:
-finalcovar <- c("Total.Coral", "Total.sqCoral", 
-                "SED_Sediment", "CCA_Coralline.Alga", 
-                "DEPTH", "MEAN_SH", "VISIBILITY",
-                "MEAN_SST_MEAN",
-                "MEAN_Waves_MEAN", "meanWAVESsq",
-                "logHUMANS20"
-)      
+#finalcovar <- c("Total.Coral", "Total.sqCoral", 
+#                "SED_Sediment", "CCA_Coralline.Alga", 
+#                "DEPTH", "MEAN_SH", "VISIBILITY",
+#                "MEAN_SST_MEAN",
+#                "MEAN_Waves_MEAN", "meanWAVESsq",
+#                "logHUMANS20"
+#)      
 
 
 Xb<-Xb[,finalcovar]
@@ -763,10 +770,11 @@ mhi.data <- list(y=y, Xb=Xb, N=nobs, nisland=nisland, W.B=W.B, nbeta=nbeta, SC=S
 ## MATCH chain.b with expected sign of each covariate in colnames(Xb) - this is used for supplying initial values to the MCMC
 chain.b<-c(1, 
            1, -1,
-           -1, 1,
+           -1, -1, 1,
            1, 1, 1,
-           -1,
-           1, -1,
+           -1, -1,
+           -1, -1, 
+           1, -1, -1,
            -1)
 
 #           ,rep(0, numb.interactions))
@@ -959,8 +967,8 @@ start.time.coda<-Sys.time()
 #z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=50) 
 #n.iter=1000000 # one million
 #n.iter=500000 # LONG RUN
-#n.iter=200000 # NEW LONG RUN
-n.iter=50000 # SHORT RUN
+n.iter=200000 # NEW LONG RUN
+#n.iter=50000 # SHORT RUN
 #n.iter=5000 # PRACTICE RUN
 n.thin=10
 z3a <- coda.samples(jm3a, var=pars, n.iter=n.iter, thin=n.thin) 
@@ -978,8 +986,8 @@ end.time.coda<-Sys.time()
 #z3a.burnin<-window(z3a.pars, start=burn.in)
 #burn.in <- 905000
 #burn.in <- 405000 # LONG RUN
-#burn.in <- 105000 # NEW LONG RUN
-burn.in <- 45000 # SHORT RUN
+burn.in <- 105000 # NEW LONG RUN
+#burn.in <- 45000 # SHORT RUN
 #burn.in <- 6000 # PRACTICE RUN
 z3a.burnin<-window(z3a, start=burn.in)
 rm(z3a)
