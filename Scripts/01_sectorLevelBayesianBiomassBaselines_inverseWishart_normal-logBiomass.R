@@ -196,9 +196,9 @@ dat$SEC_NAME<-drop.levels(dat$SEC_NAME)
 #fish<-"PISCIVORE" # 246 zeroes
 
 # FUNCTIONAL GROUPS
-fish<-"Fish Invertivores"
-  
-  
+#fish<-"Fish Invertivores"
+#fish<-"Fish Planktivores"
+fish<-"Target BC" 
   
   
 ######################################### Select response column
@@ -250,9 +250,7 @@ hist(log(dat$HUMANS200),breaks=10, xlab="Humans 200")
 #dat<-dat[dat[,fish]>0,]
 
 
-### FOR PLANKTIVORE ANALYSIS with more zero-inflation, replace zeroes with small number
-if(fish="PLANKTIVORE")
-{
+### FOR ALL OTHER ZERO-INFLATION DATA- replace zeroes with small number
 dat[,fish][(dat[,fish]==0)]<-0.0001
 hist(dat[,fish],breaks=30,main=fish, xlab=indicator)
 
@@ -263,7 +261,7 @@ plankfile<-paste("histo_", fish, "_ln.pdf", sep="")
 pdf(file=plankfile) # ie - REPLACE ln(biomass) graph outputed above which automatically removed undefined zeroes
 hist(dat[,(paste("log",fish,sep=""))],breaks=30,main=fish, xlab=indicator)
 dev.off()
-}
+
 
 
 #biomass<-grep(paste("log",fish,sep=""), names(dat))
@@ -2300,7 +2298,7 @@ dev.off()
 
 
 #SAVE DATA
-#rm(z3a.burnin) # Throughout script above, z3a.burnin is parsed into z3a.pars, z3a.sim, z3a.yhumansim, etc - i.e., saving z3a.burnin is unecessary
+rm(z3a.burnin) # Throughout script above, z3a.burnin is parsed into z3a.pars, z3a.sim, z3a.yhumansim, etc - i.e., saving z3a.burnin is unecessary
 save.image(file="_bayesianSavedWorkspace_forReDoingOutputs.RData")
 
 
