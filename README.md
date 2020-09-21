@@ -1,4 +1,4 @@
-# fish-stock Overview
+# fish-poke Overview
 Hierarchical Bayesian model for predicting reef fish biomass in the main Hawaiian Islands using NOAA's public-access coral reef ecosystem monitoring data
 
 ## Outputs
